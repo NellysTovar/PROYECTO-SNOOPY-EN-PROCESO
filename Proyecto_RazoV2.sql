@@ -494,3 +494,42 @@ END //
 -- --------------------------------------------------------------------------------
 
 DELIMITER ;
+
+
+-- PROCEDIMIENTO PARA LA EVALUACIÓN 
+DELIMITER //
+
+CREATE PROCEDURE RegistrarEvaluacion(
+    IN p_id_equipo INT,
+    IN p_id_juez INT,
+    IN p_total INT,
+    OUT p_resultado VARCHAR(255)
+)
+BEGIN
+    DECLARE v_existe INT;
+
+    -- Verificar si ya existe una evaluación para este equipo (Dado que id_equipo es UNIQUE en la tabla evaluaciones)
+    SELECT COUNT(*) INTO v_existe FROM evaluaciones WHERE id_equipo = p_id_equipo;
+
+    IF v_existe > 0 THEN
+        -- Si ya existe, actualizamos (Opcional: podrías bloquearlo si no quieres permitir re-evaluación)
+        UPDATE evaluaciones 
+        SET puntuacion_total = p_total, 
+            id_juez = p_id_juez, 
+            fecha_evaluacion = NOW()
+        WHERE id_equipo = p_id_equipo;
+        
+        SET p_resultado = 'ÉXITO: Evaluación actualizada correctamente.';
+    ELSE
+        -- Insertar nueva evaluación
+        INSERT INTO evaluaciones(id_equipo, id_juez, puntuacion_total)
+        VALUES(p_id_equipo, p_id_juez, p_total);
+        
+        -- Actualizar estado del equipo a EVALUADO
+        UPDATE equipos SET estado_proyecto = 'EVALUADO' WHERE id_equipo = p_id_equipo;
+        
+        SET p_resultado = 'ÉXITO: Evaluación registrada correctamente.';
+    END IF;
+END //
+
+DELIMITER ;

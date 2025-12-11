@@ -6,15 +6,11 @@
     <title>Evaluar Proyecto - Juez</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-
     <link rel="stylesheet" href="../Diseño/style_juez.css">
 
     <style>
-        /* Estilos específicos para los inputs de evaluación */
         .score-input {
             width: 60px;
             text-align: center;
@@ -25,21 +21,11 @@
             color: #2d3748;
             transition: all 0.2s;
         }
-        .score-input:focus {
-            border-color: #5852CB;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(88, 82, 203, 0.1);
-        }
-        /* Colores de las secciones de la rúbrica */
+        .score-input:focus { border-color: #5852CB; outline: none; box-shadow: 0 0 0 3px rgba(88, 82, 203, 0.1); }
         .header-diseno { background-color: #fff5f5; border-left: 4px solid #f56565; color: #c53030; }
         .header-prog { background-color: #f0fff4; border-left: 4px solid #48bb78; color: #2f855a; }
         .header-const { background-color: #ebf8ff; border-left: 4px solid #4299e1; color: #2b6cb0; }
-        
-        .sticky-summary {
-            position: sticky;
-            bottom: 1rem;
-            z-index: 40;
-        }
+        .sticky-summary { position: sticky; bottom: 1rem; z-index: 40; }
     </style>
 </head>
 <body class="bg-gray-50 min-h-screen flex flex-col">
@@ -47,12 +33,12 @@
     <header class="gradient-header text-white shadow-lg shrink-0">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
             <div class="flex items-center gap-3">
-                <a href="juezPanel.html" class="bg-white/20 hover:bg-white/30 p-2 rounded-lg transition text-white" title="Volver al Panel">
+                <a href="juezPanel.html" class="bg-white/20 hover:bg-white/30 p-2 rounded-lg transition text-white">
                     <i class="fa-solid fa-arrow-left"></i>
                 </a>
                 <div>
                     <h1 class="text-lg font-bold tracking-wide">EVALUACIÓN DE PROTOTIPO</h1>
-                    <p class="text-xs text-white/90 opacity-80" id="projectInfo">Cargando datos del equipo...</p>
+                    <p class="text-xs text-white/90 opacity-80" id="projectInfo">Cargando...</p>
                 </div>
             </div>
             <div class="text-right hidden md:block">
@@ -63,37 +49,28 @@
     </header>
 
     <main class="flex-1 container mx-auto p-4 md:p-6 max-w-5xl pb-24">
-        
         <form id="evalForm" onsubmit="enviarEvaluacion(event)" class="space-y-8">
             
+            <!-- INFO EQUIPO -->
             <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 flex flex-col md:flex-row justify-between items-center gap-4">
                 <div class="flex items-center gap-4">
                     <div class="w-16 h-16 rounded-full bg-gradient-to-br from-[#52C5CB] to-[#5852CB] flex items-center justify-center text-white text-2xl shadow-md">
                         <i class="fa-solid fa-robot"></i>
                     </div>
                     <div>
-                        <h2 class="text-2xl font-bold text-gray-800" id="nombreEquipo">RoboTech Alpha</h2>
-                        <p class="text-sm text-[#5289CB] font-medium"><i class="fa-solid fa-microchip mr-1"></i> <span id="nombrePrototipo">Brazo Hidráulico V2</span></p>
-                        <span class="inline-block mt-2 px-3 py-1 bg-gray-100 text-gray-600 text-xs font-bold rounded-full border border-gray-200">ID: #EQ-2025</span>
+                        <h2 class="text-2xl font-bold text-gray-800" id="nombreEquipo">Cargando...</h2>
+                        <p class="text-sm text-[#5289CB] font-medium"><i class="fa-solid fa-microchip mr-1"></i> <span id="nombrePrototipo">...</span></p>
+                        <span class="inline-block mt-2 px-3 py-1 bg-gray-100 text-gray-600 text-xs font-bold rounded-full border border-gray-200" id="equipoIdDisplay">ID: --</span>
                     </div>
                 </div>
                 <div class="text-center md:text-right">
                     <p class="text-xs text-gray-500 font-bold uppercase mb-1">Puntuación Actual</p>
-                    <div class="score-circle mx-auto md:ml-auto bg-gray-200 text-gray-500 transition-colors duration-500" id="totalScoreCircle">
-                        0
-                    </div>
+                    <div class="score-circle mx-auto md:ml-auto bg-gray-200 text-gray-500 transition-colors duration-500" id="totalScoreCircle">0</div>
                     <p class="text-[10px] text-gray-400 mt-2">Max. Posible: 100 pts</p>
                 </div>
             </div>
 
-            <div class="bg-blue-50 border border-blue-100 rounded-lg p-4 flex gap-3 text-sm text-blue-800">
-                <i class="fa-solid fa-circle-info mt-1 text-blue-500"></i>
-                <div>
-                    <strong>Instrucciones:</strong> Evalúe cada criterio en una escala del <strong>1 al 10</strong>, donde 10 es Excelente y 1 es Nulo. 
-                    El sistema calculará el total automáticamente.
-                </div>
-            </div>
-
+            <!-- SECCIONES -->
             <section class="card overflow-hidden">
                 <div class="header-diseno p-4 flex justify-between items-center">
                     <h3 class="font-bold text-lg"><i class="fa-solid fa-pen-ruler mr-2"></i>ÁREA DE DISEÑO</h3>
@@ -101,26 +78,14 @@
                 </div>
                 <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div>
-                        <div class="flex justify-between mb-2">
-                            <label class="font-bold text-gray-700">1. Bitácora</label>
-                            <input type="number" name="diseno_bitacora" min="0" max="10" class="score-input" required oninput="calcularTotal()">
-                        </div>
-                        <ul class="text-xs text-gray-500 list-disc list-inside space-y-1 ml-1">
-                            <li>Registro de Fechas y Cambios.</li>
-                            <li>Diagramas, Imágenes, Ortografía.</li>
-                            <li>Presentación General.</li>
-                        </ul>
+                        <label class="font-bold text-gray-700 block mb-2">1. Bitácora</label>
+                        <input type="number" name="diseno_bitacora" min="0" max="10" class="score-input mb-1" required oninput="calcularTotal()">
+                        <p class="text-xs text-gray-500">Registro, cambios, diagramas, ortografía.</p>
                     </div>
                     <div>
-                        <div class="flex justify-between mb-2">
-                            <label class="font-bold text-gray-700">2. Medio Digital (CAD)</label>
-                            <input type="number" name="diseno_digital" min="0" max="10" class="score-input" required oninput="calcularTotal()">
-                        </div>
-                        <ul class="text-xs text-gray-500 list-disc list-inside space-y-1 ml-1">
-                            <li>Video y Animación.</li>
-                            <li>Modelado en Autodesk Inventor (Acorde al robot).</li>
-                            <li>Simulación vs Cálculos.</li>
-                        </ul>
+                        <label class="font-bold text-gray-700 block mb-2">2. Medio Digital (CAD)</label>
+                        <input type="number" name="diseno_digital" min="0" max="10" class="score-input mb-1" required oninput="calcularTotal()">
+                        <p class="text-xs text-gray-500">Video, modelado Inventor, simulación.</p>
                     </div>
                 </div>
             </section>
@@ -133,35 +98,26 @@
                 <div class="p-6 space-y-6">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div>
-                            <div class="flex justify-between mb-2">
-                                <label class="font-bold text-gray-700">1. Inspección General</label>
-                                <input type="number" name="prog_inspeccion" min="0" max="10" class="score-input" required oninput="calcularTotal()">
-                            </div>
-                            <p class="text-xs text-gray-500 mb-1">Software RobotC, funciones, modularidad y depuración.</p>
+                            <label class="font-bold text-gray-700 block mb-2">1. Inspección General</label>
+                            <input type="number" name="prog_inspeccion" min="0" max="10" class="score-input mb-1" required oninput="calcularTotal()">
+                            <p class="text-xs text-gray-500">Software RobotC, funciones, modularidad.</p>
                         </div>
                         <div>
-                            <div class="flex justify-between mb-2">
-                                <label class="font-bold text-gray-700">2. Sistema Autónomo</label>
-                                <input type="number" name="prog_autonomo" min="0" max="10" class="score-input" required oninput="calcularTotal()">
-                            </div>
-                            <p class="text-xs text-gray-500 mb-1">Documentación, vinculación de acciones y uso de sensores.</p>
+                            <label class="font-bold text-gray-700 block mb-2">2. Sistema Autónomo</label>
+                            <input type="number" name="prog_autonomo" min="0" max="10" class="score-input mb-1" required oninput="calcularTotal()">
+                            <p class="text-xs text-gray-500">Documentación, sensores.</p>
                         </div>
                     </div>
-                    <div class="border-t border-gray-100 my-2"></div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4 border-t">
                         <div>
-                            <div class="flex justify-between mb-2">
-                                <label class="font-bold text-gray-700">3. Sistema Manipulado</label>
-                                <input type="number" name="prog_manipulado" min="0" max="10" class="score-input" required oninput="calcularTotal()">
-                            </div>
-                            <p class="text-xs text-gray-500 mb-1">Vínculo Joystick-Robot, calibración y respuesta al mando.</p>
+                            <label class="font-bold text-gray-700 block mb-2">3. Sistema Manipulado</label>
+                            <input type="number" name="prog_manipulado" min="0" max="10" class="score-input mb-1" required oninput="calcularTotal()">
+                            <p class="text-xs text-gray-500">Vínculo Joystick-Robot, calibración.</p>
                         </div>
                         <div>
-                            <div class="flex justify-between mb-2">
-                                <label class="font-bold text-gray-700">4. Demostración (15s)</label>
-                                <input type="number" name="prog_demo" min="0" max="10" class="score-input" required oninput="calcularTotal()">
-                            </div>
-                            <p class="text-xs text-gray-500 mb-1">Sin inconvenientes, cumple objetivo y explica rutina.</p>
+                            <label class="font-bold text-gray-700 block mb-2">4. Demostración (15s)</label>
+                            <input type="number" name="prog_demo" min="0" max="10" class="score-input mb-1" required oninput="calcularTotal()">
+                            <p class="text-xs text-gray-500">Ejecución rutina, sin fallos.</p>
                         </div>
                     </div>
                 </div>
@@ -170,34 +126,24 @@
             <section class="card overflow-hidden">
                 <div class="header-const p-4 flex justify-between items-center">
                     <h3 class="font-bold text-lg"><i class="fa-solid fa-screwdriver-wrench mr-2"></i>ÁREA DE CONSTRUCCIÓN</h3>
-                    <span class="text-xs font-bold bg-white/50 px-2 py-1 rounded">20 Puntos Máx (Ponderado)</span>
+                    <span class="text-xs font-bold bg-white/50 px-2 py-1 rounded">20 Puntos Máx</span>
                 </div>
                 <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div>
-                        <div class="flex justify-between mb-2">
-                            <label class="font-bold text-gray-700">1. Inspección General</label>
-                            <input type="number" name="const_inspeccion" min="0" max="10" class="score-input" required oninput="calcularTotal()">
-                        </div>
-                        <ul class="text-xs text-gray-500 list-disc list-inside space-y-1 ml-1">
-                            <li>Estética, Estabilidad, Sensores.</li>
-                            <li>Cableado y Neumática.</li>
-                            <li>Solo componentes VEX Robotics.</li>
-                        </ul>
+                        <label class="font-bold text-gray-700 block mb-2">1. Inspección General</label>
+                        <input type="number" name="const_inspeccion" min="0" max="10" class="score-input mb-1" required oninput="calcularTotal()">
+                        <p class="text-xs text-gray-500">Estética, estabilidad, VEX Robotics.</p>
                     </div>
                     <div>
-                        <div class="flex justify-between mb-2">
-                            <label class="font-bold text-gray-700">2. Libreta de Ingeniería</label>
-                            <input type="number" name="const_libreta" min="0" max="10" class="score-input" required oninput="calcularTotal()">
-                        </div>
-                        <ul class="text-xs text-gray-500 list-disc list-inside space-y-1 ml-1">
-                            <li>Cálculos (Estructuras, Velocidad, Engranes).</li>
-                            <li>Centro de Gravedad, Torque, Potencia.</li>
-                        </ul>
+                        <label class="font-bold text-gray-700 block mb-2">2. Libreta de Ingeniería</label>
+                        <input type="number" name="const_libreta" min="0" max="10" class="score-input mb-1" required oninput="calcularTotal()">
+                        <p class="text-xs text-gray-500">Cálculos, estructuras, engranes.</p>
                     </div>
                 </div>
             </section>
 
-            <div class="sticky-summary bg-white border-t border-gray-200 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] p-4 rounded-xl flex justify-between items-center gap-4 animate-slide">
+            <!-- FOOTER FLOTANTE -->
+            <div class="sticky-summary bg-white border-t border-gray-200 shadow-lg p-4 rounded-xl flex justify-between items-center gap-4 animate-slide">
                 <div class="hidden md:block">
                     <span class="text-xs text-gray-500 font-bold uppercase">Total Calculado:</span>
                     <span class="text-2xl font-bold text-[#5852CB]" id="footerScore">0</span>
@@ -208,12 +154,12 @@
                     <button type="button" onclick="history.back()" class="flex-1 md:flex-none px-6 py-3 rounded-lg border border-gray-300 text-gray-600 font-bold hover:bg-gray-50 transition">
                         Cancelar
                     </button>
+                    <!-- BOTÓN VERDE -->
                     <button type="submit" class="flex-1 md:flex-none bg-green-500 hover:bg-green-600 transition-colors px-8 py-3 rounded-lg text-white font-bold shadow-lg flex items-center justify-center gap-2">
                         <i class="fa-solid fa-paper-plane"></i> ENVIAR EVALUACIÓN
                     </button>
                 </div>
             </div>
-
         </form>
     </main>
 
@@ -223,80 +169,92 @@
     </div>
 
     <script>
-        // Cargar datos simulados (en producción vendrían de la BD/URL)
+        let currentEquipoId = 0;
+
         document.addEventListener('DOMContentLoaded', () => {
+            // Leer parámetros URL
             const urlParams = new URLSearchParams(window.location.search);
-            const nombre = urlParams.get('equipo') || "RoboTech Alpha"; // Default para demo
-            const id = urlParams.get('id') || "1";
+            currentEquipoId = urlParams.get('id');
+            const nombre = urlParams.get('equipo') || "Equipo Desconocido";
+            const prototipo = urlParams.get('prototipo') || "Sin nombre";
+
+            if(!currentEquipoId) {
+                alert("Error: No se seleccionó ningún equipo.");
+                window.location.href = 'juezPanel.html';
+                return;
+            }
             
             document.getElementById('nombreEquipo').innerText = nombre;
-            document.getElementById('projectInfo').innerText = `Evaluando Equipo #${id}`;
+            document.getElementById('nombrePrototipo').innerText = prototipo;
+            document.getElementById('equipoIdDisplay').innerText = `ID: #${currentEquipoId}`;
+            document.getElementById('projectInfo').innerText = `Evaluando ID: ${currentEquipoId}`;
         });
 
-        // Cálculo en tiempo real
         function calcularTotal() {
             const inputs = document.querySelectorAll('.score-input');
             let total = 0;
             let maxPuntos = 0;
-            let llenos = 0;
 
             inputs.forEach(input => {
                 const val = parseInt(input.value) || 0;
                 total += val;
                 maxPuntos += 10;
-                if(input.value !== "") llenos++;
             });
 
             // Actualizar UI
-            const circle = document.getElementById('totalScoreCircle');
-            const footerScore = document.getElementById('footerScore');
-            
-            circle.innerText = total;
-            footerScore.innerText = total;
+            document.getElementById('totalScoreCircle').innerText = total;
+            document.getElementById('footerScore').innerText = total;
 
-            // Cambiar color según puntaje (Visual Feedback)
-            if (total < (maxPuntos * 0.6)) {
-                circle.style.background = 'linear-gradient(135deg, #f56565, #c53030)'; // Rojo
-            } else if (total < (maxPuntos * 0.8)) {
-                circle.style.background = 'linear-gradient(135deg, #ecc94b, #d69e2e)'; // Amarillo
-            } else {
-                circle.style.background = 'linear-gradient(135deg, #48bb78, #2f855a)'; // Verde
-            }
+            const circle = document.getElementById('totalScoreCircle');
+            if (total < 60) circle.style.background = 'linear-gradient(135deg, #f56565, #c53030)';
+            else if (total < 80) circle.style.background = 'linear-gradient(135deg, #ecc94b, #d69e2e)';
+            else circle.style.background = 'linear-gradient(135deg, #48bb78, #2f855a)';
         }
 
-        // Manejo del Envío
         async function enviarEvaluacion(e) {
             e.preventDefault();
             
-            if(!confirm("¿Confirmar envío de evaluación? Esta acción no se puede deshacer.")) return;
+            if(!confirm("¿Confirmar envío? No podrás editarlo después.")) return;
 
             const btn = e.target.querySelector('button[type="submit"]');
-            const originalText = btn.innerHTML;
             btn.disabled = true;
-            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Guardando...';
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Enviando...';
 
-            // Recopilar datos
-            const formData = new FormData(document.getElementById('evalForm'));
-            const data = Object.fromEntries(formData.entries());
-            data.total = document.getElementById('footerScore').innerText;
+            const totalScore = document.getElementById('footerScore').innerText;
 
-            console.log("Datos a enviar:", data);
+            try {
+                const response = await fetch('../Configuracion/juez_controlador.php', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        action: 'guardar_evaluacion',
+                        id_equipo: currentEquipoId,
+                        total: totalScore
+                    })
+                });
 
-            // SIMULACIÓN DE FETCH (Aquí conectarías con tu PHP)
-            // const response = await fetch('../Configuracion/juez_controlador.php', { ... });
-            
-            setTimeout(() => {
-                mostrarToast("Evaluación registrada correctamente", "success");
-                setTimeout(() => {
-                    window.location.href = 'juezPanel.html'; // Volver al panel
-                }, 1500);
-            }, 1000);
+                const result = await response.json();
+
+                if (result.success) {
+                    mostrarToast("Evaluación guardada con éxito", "success");
+                    setTimeout(() => { window.location.href = 'juezPanel.html'; }, 1500);
+                } else {
+                    throw new Error(result.message || "Error en el servidor");
+                }
+
+            } catch (error) {
+                mostrarToast(error.message, "error");
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> ENVIAR EVALUACIÓN';
+            }
         }
 
         function mostrarToast(msg, type) {
             const t = document.getElementById('toast');
             document.getElementById('toastMessage').innerText = msg;
-            document.getElementById('toastIcon').innerHTML = type === 'success' ? '<i class="fa-solid fa-check-circle text-green-500"></i>' : '<i class="fa-solid fa-circle-xmark text-red-500"></i>';
+            document.getElementById('toastIcon').innerHTML = type === 'success' 
+                ? '<i class="fa-solid fa-check-circle text-green-500"></i>' 
+                : '<i class="fa-solid fa-circle-xmark text-red-500"></i>';
             t.className = `toast ${type === 'success' ? 'toast-success' : 'toast-error'} show`;
             setTimeout(() => t.classList.remove('show'), 3000);
         }
