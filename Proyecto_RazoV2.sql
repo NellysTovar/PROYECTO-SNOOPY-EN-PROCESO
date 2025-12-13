@@ -92,10 +92,18 @@ INSERT INTO usuarios(email,password_hash,nombres,apellidos,escuela_proc,tipo_usu
 ('admin@robotica.com','admin123','Admin','Sistema','SISTEMA','ADMIN');
 
 -- =============================================
--- 2. FUNCIONES
+-- 2. FUNCIONES (ACTUALIZADAS Y CORREGIDAS)
 -- =============================================
 
+-- Permite crear funciones sin errores de permisos en algunos servidores
+SET GLOBAL log_bin_trust_function_creators = 1;
+
+DROP FUNCTION IF EXISTS VerificarEdadCategoria;
+DROP FUNCTION IF EXISTS VerificarGradoCategoria;
+DROP FUNCTION IF EXISTS VerificarEquipoRepetido;
+
 DELIMITER //
+
 CREATE FUNCTION VerificarEquipoRepetido(p_nombre_equipo VARCHAR(150), p_id_evento INT, p_id_categoria INT) 
 RETURNS BOOLEAN DETERMINISTIC READS SQL DATA
 BEGIN
@@ -108,22 +116,42 @@ END//
 CREATE FUNCTION VerificarEdadCategoria(p_edad INT, p_id_categoria INT)
 RETURNS BOOLEAN DETERMINISTIC READS SQL DATA
 BEGIN
-    DECLARE emin INT; DECLARE emax INT;
-    SELECT edad_minima, edad_maxima INTO emin, emax FROM categorias WHERE id_categoria = p_id_categoria;
-    RETURN p_edad BETWEEN emin AND emax;
+    DECLARE emin INT; 
+    DECLARE emax INT;
+    
+    SET emin = 0;
+    SET emax = 100;
+
+    SELECT edad_minima, edad_maxima INTO emin, emax 
+    FROM categorias 
+    WHERE id_categoria = p_id_categoria;
+    
+    IF p_edad >= emin AND p_edad <= emax THEN
+        RETURN TRUE;
+    ELSE
+        RETURN FALSE;
+    END IF;
 END//
 
 CREATE FUNCTION VerificarGradoCategoria(p_grado INT, p_id_categoria INT)
 RETURNS BOOLEAN DETERMINISTIC READS SQL DATA
 BEGIN
     DECLARE cat_nombre VARCHAR(50);
-    SELECT nombre_categoria INTO cat_nombre FROM categorias WHERE id_categoria = p_id_categoria;
     
-    IF cat_nombre = 'PRIMARIA' THEN RETURN p_grado BETWEEN 1 AND 6;
-    ELSEIF cat_nombre = 'SECUNDARIA' THEN RETURN p_grado BETWEEN 1 AND 3;
-    ELSEIF cat_nombre = 'PREPARATORIA' THEN RETURN p_grado BETWEEN 1 AND 6;
-    ELSEIF cat_nombre = 'UNIVERSIDAD' THEN RETURN p_grado BETWEEN 1 AND 14;
-    ELSE RETURN TRUE;
+    SELECT nombre_categoria INTO cat_nombre 
+    FROM categorias 
+    WHERE id_categoria = p_id_categoria;
+    
+    IF cat_nombre = 'PRIMARIA' THEN 
+        RETURN p_grado BETWEEN 1 AND 6;
+    ELSEIF cat_nombre = 'SECUNDARIA' THEN 
+        RETURN p_grado BETWEEN 1 AND 3;
+    ELSEIF cat_nombre = 'PREPARATORIA' THEN 
+        RETURN p_grado BETWEEN 1 AND 6;
+    ELSEIF cat_nombre = 'UNIVERSIDAD' THEN 
+        RETURN p_grado BETWEEN 1 AND 14; 
+    ELSE 
+        RETURN TRUE;
     END IF;
 END //
 DELIMITER ;
