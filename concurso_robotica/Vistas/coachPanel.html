@@ -5,21 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Coach - Concurso de Robótica</title>
     
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- Estilos Personalizados -->
     <link rel="stylesheet" href="../Diseño/style_coach.css">
 </head>
 <body class="h-screen flex flex-col overflow-hidden bg-gray-50">
 
-    <!-- HEADER -->
     <header class="gradient-bg text-white shadow-lg z-10 shrink-0">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
             <div class="flex items-center gap-3">
@@ -34,11 +29,14 @@
             
             <div class="flex items-center gap-4">
                 <div class="text-right hidden md:block">
-                    <!-- Nombre dinámico cargado por JS si se desea, o por PHP session -->
                     <p class="text-sm font-bold" id="coachName">Bienvenido</p>
                     <p class="text-[10px] text-blue-100 bg-white/20 px-2 py-0.5 rounded-full inline-block">Sesión Activa</p>
                 </div>
-                <!-- BOTÓN LOGOUT (Funcionalidad Solicitada) -->
+
+                <a href="reportes.html" class="hidden md:flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-3 py-2 rounded-lg text-sm font-bold transition-colors border border-white/20">
+                    <i class="fa-solid fa-clipboard-list"></i> Ver Resultados
+                </a>
+
                 <button onclick="handleLogout()" class="bg-white/10 hover:bg-white/20 text-white p-2 rounded-lg transition-colors" title="Cerrar Sesión">
                     <i class="fa-solid fa-right-from-bracket"></i>
                 </button>
@@ -46,11 +44,9 @@
         </div>
     </header>
 
-    <!-- CONTENIDO PRINCIPAL SCROLLABLE -->
     <main class="flex-1 overflow-y-auto p-4 md:p-6 pb-20">
         <div class="container mx-auto max-w-5xl space-y-8">
 
-            <!-- SECCIÓN 1: FORMULARIO DE REGISTRO DE EQUIPO -->
             <section class="animate-slide-up">
                 <div class="glass-card p-6 md:p-8">
                     <div class="flex items-center gap-3 mb-6 border-b border-gray-100 pb-4">
@@ -65,7 +61,6 @@
 
                     <form id="registroEquipoForm" onsubmit="handleRegistrarEquipo(event)" class="space-y-6">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <!-- Evento -->
                             <div class="space-y-1">
                                 <label class="text-xs font-bold text-[#5289CB] uppercase tracking-wide ml-1">Evento</label>
                                 <div class="relative">
@@ -77,14 +72,12 @@
                                 </div>
                             </div>
 
-                            <!-- Categoría -->
                             <div class="space-y-1">
                                 <label class="text-xs font-bold text-[#5289CB] uppercase tracking-wide ml-1">Categoría</label>
                                 <div class="relative">
                                     <i class="fa-solid fa-layer-group absolute left-3 top-3.5 text-gray-400"></i>
                                     <select id="categoriaSelect" class="input-field pl-10 appearance-none cursor-pointer" required>
                                         <option value="" disabled selected>Seleccione categoría...</option>
-                                        <!-- Los valores deben coincidir con tu BD -->
                                         <option value="1">PRIMARIA</option>
                                         <option value="2">SECUNDARIA</option>
                                         <option value="3">PREPARATORIA</option>
@@ -94,13 +87,11 @@
                                 </div>
                             </div>
 
-                            <!-- Nombre Equipo -->
                             <div class="space-y-1">
                                 <label class="text-xs font-bold text-[#5289CB] uppercase tracking-wide ml-1">Nombre del Equipo *</label>
                                 <input type="text" id="nombreEquipo" class="input-field" placeholder="Ej. Robotech Alpha" required>
                             </div>
 
-                            <!-- Nombre Proyecto -->
                             <div class="space-y-1">
                                 <label class="text-xs font-bold text-[#5289CB] uppercase tracking-wide ml-1">Nombre del Prototipo *</label>
                                 <input type="text" id="nombreProyecto" class="input-field" placeholder="Ej. Brazo Hidráulico V2" required>
@@ -115,7 +106,6 @@
                 </div>
             </section>
 
-            <!-- SECCIÓN 2: GESTIÓN DE INTEGRANTES -->
             <section id="section-integrantes" class="animate-slide-up hidden opacity-50 pointer-events-none transition-all duration-300">
                 <div class="glass-card p-6 md:p-8 border-l-4 border-l-[#52C5CB]">
                     <div class="flex justify-between items-start mb-6">
@@ -154,11 +144,9 @@
                         </form>
                     </div>
 
-                    <!-- Lista de Integrantes -->
                     <div>
                         <h4 class="text-xs font-bold text-gray-400 uppercase mb-3 ml-1">Miembros Actuales</h4>
                         <div id="listaIntegrantes" class="space-y-2">
-                            <!-- Items dinámicos -->
                             <div class="p-4 text-center text-gray-400 text-sm italic bg-white rounded-lg border border-dashed border-gray-300">
                                 Cargando...
                             </div>
@@ -173,21 +161,18 @@
                 </div>
             </section>
 
-            <!-- SECCIÓN 3: MIS EQUIPOS -->
             <section class="animate-slide-up">
                 <div class="mb-4 flex items-center justify-between">
                     <h2 class="text-xl font-bold text-gray-700">3. Mis Equipos Registrados</h2>
                     <span class="text-xs font-medium bg-white px-3 py-1 rounded-full text-gray-500 shadow-sm" id="totalEquiposCount">0 Equipos</span>
                 </div>
                 
-                <!-- Contenedor Scrollable si son muchos -->
                 <div class="relative min-h-[200px]">
                     <div id="loaderEquipos" class="hidden absolute inset-0 flex items-center justify-center bg-white/50 z-10">
                         <div class="loader"></div>
                     </div>
                     
                     <div id="contenedorEquipos" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <!-- Tarjetas dinámicas -->
                         <div class="col-span-1 lg:col-span-2 p-12 text-center text-gray-400">
                             <i class="fa-solid fa-folder-open text-4xl mb-3 opacity-30"></i>
                             <p>No tienes equipos registrados aún.</p>
@@ -199,7 +184,6 @@
         </div>
     </main>
 
-    <!-- TOAST NOTIFICACIONES -->
     <div id="toast" class="toast">
         <div class="text-xl icon-container"></div>
         <div>
@@ -208,7 +192,6 @@
         </div>
     </div>
 
-    <!-- JAVASCRIPT (Lógica PHP/Fetch) -->
     <script>
         // Variables Globales
         let currentTeamId = null;
@@ -327,6 +310,20 @@
                         const estadoClass = team.estado_proyecto === 'EVALUADO' ? 'status-evaluado' : 'status-pendiente';
                         const estadoIcon = team.estado_proyecto === 'EVALUADO' ? '<i class="fa-solid fa-check"></i>' : '<i class="fa-regular fa-clock"></i>';
 
+                        // MODIFICACIÓN SOLICITADA: Ajuste del botón según estado
+                        // Si está evaluado, mostramos "Solo Ver" en lugar de "Gestionar".
+                        const botonTexto = team.estado_proyecto === 'EVALUADO' 
+                            ? 'Solo Ver Integrantes <i class="fa-solid fa-eye"></i>' 
+                            : 'Gestionar Integrantes <i class="fa-solid fa-pen"></i>';
+                        
+                        const botonClase = team.estado_proyecto === 'EVALUADO'
+                            ? 'text-gray-400 cursor-not-allowed hover:text-gray-500' // Estilo visual "deshabilitado" o informativo
+                            : 'text-[#52C5CB] hover:text-[#5852CB]';
+
+                        // Para mantener la funcionalidad de ver (click en card), el botón es solo visual en este diseño,
+                        // pero cambiamos el texto para reflejar que no se debe editar.
+                        // Sin embargo, como el click es en la tarjeta completa, ajustaremos el texto del botón interior.
+
                         card.innerHTML = `
                             <div>
                                 <div class="flex justify-between items-start mb-2">
@@ -343,8 +340,8 @@
                             </div>
                             
                             <div class="pt-4 border-t border-gray-100 flex justify-between items-center">
-                                <button class="text-sm font-bold text-[#52C5CB] hover:text-[#5852CB] transition-colors w-full text-right">
-                                    ${currentTeamId == team.id_equipo ? 'Gestionando <i class="fa-solid fa-pen"></i>' : 'Gestionar Integrantes <i class="fa-solid fa-chevron-right"></i>'}
+                                <button class="text-sm font-bold w-full text-right transition-colors ${botonClase}">
+                                    ${currentTeamId == team.id_equipo ? 'Seleccionado <i class="fa-solid fa-check"></i>' : botonTexto}
                                 </button>
                             </div>
                         `;
@@ -405,9 +402,6 @@
                         result.data.forEach(m => {
                             const item = document.createElement('div');
                             item.className = "flex items-center justify-between p-3 bg-white rounded-lg border border-gray-200 shadow-sm";
-                            // Nota: El SP ListarIntegrantesPorEquipo no devuelve ID de integrante para borrar, 
-                            // habría que ajustar el SP o usar nombre para borrar (poco seguro).
-                            // Asumiremos que el backend maneja borrado por ID si se agrega al SP.
                             item.innerHTML = `
                                 <div class="flex items-center gap-3">
                                     <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 font-bold text-xs">
@@ -418,7 +412,7 @@
                                         <p class="text-xs text-gray-500">${m.edad} años</p>
                                     </div>
                                 </div>
-                                <button onclick="eliminarIntegrante(${m.id_integrante || 0})" class="text-red-400 hover:text-red-600 p-2 transition-colors" title="Eliminar (Requiere implementación en BD)">
+                                <button onclick="eliminarIntegrante(${m.id_integrante || 0})" class="text-red-400 hover:text-red-600 p-2 transition-colors" title="Eliminar">
                                     <i class="fa-solid fa-trash-can"></i>
                                 </button>
                             `;

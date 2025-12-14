@@ -5,24 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Juez - Evaluación</title>
     
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
-    <!-- Estilos Específicos de Juez -->
     <link rel="stylesheet" href="../Diseño/style_juez.css">
 </head>
 <body class="bg-gray-50 h-screen flex flex-col overflow-hidden">
 
-    <!-- HEADER -->
     <header class="gradient-header text-white shadow-lg z-10 shrink-0">
         <div class="container mx-auto px-6 py-3 flex justify-between items-center">
-            <!-- Identidad -->
             <div class="flex items-center gap-3">
                 <div class="bg-white/20 p-2 rounded-lg backdrop-blur-sm">
                     <i class="fa-solid fa-gavel text-xl"></i>
@@ -33,15 +27,16 @@
                 </div>
             </div>
             
-            <!-- Controles Usuario -->
             <div class="flex items-center gap-4">
                 <div class="text-right hidden md:block">
-                    <!-- Se podría cargar el nombre real desde JS -->
                     <p class="text-sm font-bold" id="juezName">Juez</p>
                     <p class="text-[10px] bg-white/20 px-2 py-0.5 rounded-full inline-block">Sesión Activa</p>
                 </div>
                 
-                <!-- BOTÓN CERRAR SESIÓN -->
+                <a href="reportes.html" class="hidden md:flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-3 py-2 rounded-lg text-xs font-bold transition-colors border border-white/10 shadow-sm uppercase tracking-wide">
+                    <i class="fa-solid fa-trophy"></i> Ranking Global
+                </a>
+
                 <button onclick="handleLogout()" class="bg-white/10 hover:bg-white/20 text-white p-2 rounded-lg transition-colors border border-white/10 shadow-sm" title="Cerrar Sesión">
                     <i class="fa-solid fa-right-from-bracket"></i>
                 </button>
@@ -49,11 +44,9 @@
         </div>
     </header>
 
-    <!-- CONTENIDO PRINCIPAL -->
     <main class="flex-1 overflow-y-auto p-6">
         <div class="container mx-auto max-w-6xl space-y-8">
 
-            <!-- Bienvenida / Stats Rápidos -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 animate-fade">
                 <div class="card p-6 border-l-4 border-l-[#52C5CB] flex items-center justify-between">
                     <div>
@@ -84,7 +77,6 @@
                 </div>
             </div>
 
-            <!-- Lista de Proyectos -->
             <div class="card animate-slide">
                 <div class="p-5 border-b border-gray-100 flex justify-between items-center bg-gray-50 rounded-t-xl">
                     <h3 class="font-bold text-gray-700 flex items-center gap-2">
@@ -92,11 +84,9 @@
                         Proyectos por Evaluar
                     </h3>
                     
-                    <!-- Filtro Categoría -->
                     <select id="filtroCategoria" onchange="cargarProyectos()" class="bg-white border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-[#5852CB] focus:border-[#5852CB] block p-2 outline-none cursor-pointer">
                         <option value="TODOS">Todas las Categorías</option>
-                        <!-- Se llenará dinámicamente -->
-                    </select>
+                        </select>
                 </div>
 
                 <div class="overflow-x-auto">
@@ -111,7 +101,6 @@
                             </tr>
                         </thead>
                         <tbody id="tablaProyectos" class="divide-y divide-gray-100">
-                            <!-- Estado de Carga Inicial -->
                             <tr>
                                 <td colspan="5" class="px-6 py-12 text-center text-gray-400">
                                     <div class="flex flex-col items-center">
@@ -128,7 +117,6 @@
         </div>
     </main>
 
-    <!-- Script Lógica -->
     <script>
         const API_URL = '../Configuracion/juez_controlador.php';
 
@@ -195,12 +183,14 @@
                 const badgeClass = esEvaluado ? 'badge-evaluated' : 'badge-pending';
                 const estadoIcon = esEvaluado ? '<i class="fa-solid fa-check"></i>' : '<i class="fa-regular fa-clock"></i>';
                 
-                // --- AQUÍ ESTÁ LA SOLUCIÓN DEL BOTÓN ---
-                // Botón deshabilitado si ya está evaluado (opcional, o permitir re-evaluar)
-                // Usamos encodeURIComponent para asegurar que nombres con espacios pasen bien por la URL
+                // Botón dinámico: Cambia texto si ya está evaluado
+                const btnTexto = esEvaluado ? 'Ver Evaluación' : 'Evaluar';
+                const btnIcono = esEvaluado ? 'fa-eye' : 'fa-arrow-right';
+                const btnColor = esEvaluado ? 'bg-gray-500 hover:bg-gray-600' : 'bg-[#5852CB] hover:bg-[#4c46b6]';
+
                 const btnAccion = `<button onclick="irAEvaluar(${p.id_equipo}, '${encodeURIComponent(p.nombre_equipo)}', '${encodeURIComponent(p.nombre_prototipo)}')" 
-                                    class="bg-[#5852CB] hover:bg-[#4c46b6] text-white px-4 py-2 rounded-lg text-xs font-bold shadow-md transition flex items-center justify-center gap-2 mx-auto">
-                                    ${esEvaluado ? 'Editar / Ver' : 'Evaluar'} <i class="fa-solid fa-arrow-right"></i>
+                                    class="${btnColor} text-white px-4 py-2 rounded-lg text-xs font-bold shadow-md transition flex items-center justify-center gap-2 mx-auto min-w-[100px]">
+                                    ${btnTexto} <i class="fa-solid ${btnIcono}"></i>
                                    </button>`;
 
                 const tr = document.createElement('tr');
@@ -225,10 +215,8 @@
             });
         }
 
-        // --- 4. FUNCIÓN DE REDIRECCIÓN (LO QUE FALTABA) ---
+        // --- 4. FUNCIÓN DE REDIRECCIÓN ---
         function irAEvaluar(id, nombre, prototipo) {
-            // Decodificamos por si acaso, aunque la URL lo maneja, es buena práctica si manipulamos strings
-            // La redirección pasa los parámetros por URL GET para que evaluarProyecto.html los lea.
             window.location.href = `evaluarProyecto.html?id=${id}&equipo=${nombre}&prototipo=${prototipo}`;
         }
 
